@@ -64,6 +64,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controller.cs" />
+    <EmbeddedResource Include="ClampPanel.resx">
+      <DependentUpon>ClampPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

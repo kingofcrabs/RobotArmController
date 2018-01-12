@@ -14,13 +14,13 @@ namespace RobotArm
     public partial class RobotControlForm: Form
     {
         const int radius = PositionPanel.radius;
-        // const int clampRadius = 10;
-
+        const int clampRadius = ClampPanel.clampRadius;
+        
         private float robotArmX;
         private float robotArmY;
         private float robotRotation = 0;
-        // private float robotClampX;
-        // private float robotClampY;
+        private float robotClampX = 0;
+        private float robotClampY = 0;
 
         Controller control = new Controller();
 
@@ -28,8 +28,8 @@ namespace RobotArm
         public RobotControlForm()
         {
             InitializeComponent();
-            //GetOrigin();
-            //myPanel1.Invalidate();
+            GetOrigin();
+            positionPanel.Invalidate();
             
         }
 
@@ -48,14 +48,14 @@ namespace RobotArm
             System.Random raniSeed = new Random();
             int iSeed = raniSeed.Next();
             Random ranOrigin = new Random(iSeed);
-            //while ((robotArmPositionPanel.GetOriginX() - radius) * (robotArmPositionPanel.GetOriginX() - radius) + (robotArmPositionPanel.GetOriginY() - radius) * (robotArmPositionPanel.GetOriginY() - radius) > radius * radius)
-            //{
-            //    robotArmPositionPanel.SetOriginX(ranOrigin.Next(0, radius * 2));
-            //    robotArmPositionPanel.SetOriginY(ranOrigin.Next(0, radius));
-            //}
-            //robotArmPositionPanel.UpdateNowOrigin();
-            //Debug.WriteLine(robotArmPositionPanel.GetOriginX());
-            //Debug.WriteLine(robotArmPositionPanel.GetOriginY());
+            while ((positionPanel.GetOriginX() - radius) * (positionPanel.GetOriginX() - radius) + (positionPanel.GetOriginY() - radius) * (positionPanel.GetOriginY() - radius) > radius * radius)
+            {
+                positionPanel.SetOriginX(ranOrigin.Next(0, radius * 2));
+                positionPanel.SetOriginY(ranOrigin.Next(0, radius));
+            }
+            positionPanel.UpdateNowOrigin();
+            Debug.WriteLine(positionPanel.GetOriginX());
+            Debug.WriteLine(positionPanel.GetOriginY());
 
         }
 
@@ -101,8 +101,8 @@ namespace RobotArm
                 case Keys.Right:
                     //if(CheckOrigin(Direction.Right))
                     {
-                        robotArmPositionPanel.SetOriginX(robotArmPositionPanel.GetOriginX() + positionTrackBar.Value);
-                        robotArmPositionPanel.Invalidate();
+                        positionPanel.SetOriginX(positionPanel.GetOriginX() + positionTrackBar.Value);
+                        positionPanel.Invalidate();
                         FormToRobotArm();
                     }
                     //else
@@ -115,8 +115,8 @@ namespace RobotArm
                 case Keys.Left:
                     //if (CheckOrigin(Direction.Left))
                     {
-                        robotArmPositionPanel.SetOriginX(robotArmPositionPanel.GetOriginX() - positionTrackBar.Value);
-                        robotArmPositionPanel.Invalidate();
+                        positionPanel.SetOriginX(positionPanel.GetOriginX() - positionTrackBar.Value);
+                        positionPanel.Invalidate();
                         FormToRobotArm();
                     }
                     //else
@@ -129,8 +129,8 @@ namespace RobotArm
                 case Keys.Up:
                     //if (CheckOrigin(Direction.Up))
                     {
-                        robotArmPositionPanel.SetOriginY(robotArmPositionPanel.GetOriginY() - positionTrackBar.Value);
-                        robotArmPositionPanel.Invalidate();
+                        positionPanel.SetOriginY(positionPanel.GetOriginY() - positionTrackBar.Value);
+                        positionPanel.Invalidate();
                         FormToRobotArm();
                     }
                     //else
@@ -143,8 +143,8 @@ namespace RobotArm
                 case Keys.Down:
                     //if (CheckOrigin(Direction.Down))
                     {
-                        robotArmPositionPanel.SetOriginY(robotArmPositionPanel.GetOriginY() + positionTrackBar.Value);
-                        robotArmPositionPanel.Invalidate();
+                        positionPanel.SetOriginY(positionPanel.GetOriginY() + positionTrackBar.Value);
+                        positionPanel.Invalidate();
                         FormToRobotArm();
                     }
                     //else
@@ -155,14 +155,14 @@ namespace RobotArm
                     //}
                     break;
                 case Keys.A:
-                    robotRotation -= 5;
-                    // ClampAngelToOrigin();
-                    robotArmPositionPanel.Invalidate();
+                    robotRotation -= 90;
+                    ClampAngelToOrigin();
+                    clampPanel.Invalidate();
                     break;
                 case Keys.D:
-                    robotRotation += 5;
-                    // ClampAngelToOrigin();
-                    robotArmPositionPanel.Invalidate();
+                    robotRotation += 90;
+                    ClampAngelToOrigin();
+                    clampPanel.Invalidate();
                     break;
 
             }
@@ -174,7 +174,8 @@ namespace RobotArm
             robotArmX = control.robot1.x/2;
             robotArmY = control.robot1.y/2;
             robotRotation = control.robot1.rotation;
-            // ClampAngelToOrigin();
+
+            ClampAngelToOrigin();
 
             Debug.WriteLine("rotation:{0}", robotRotation);
             Debug.WriteLine("angle1:{0}", control.robot1.angle1);
@@ -182,35 +183,32 @@ namespace RobotArm
             Debug.WriteLine("x:{0}", robotArmX);
             Debug.WriteLine("y:{0}", robotArmY);
 
-            robotArmPositionPanel.SetOriginX(radius - robotArmY);
-            robotArmPositionPanel.SetOriginY(radius - robotArmX);
-            robotArmPositionPanel.UpdateNowOrigin();
-            robotArmPositionPanel.Invalidate();
+            positionPanel.SetOriginX(radius - robotArmY);
+            positionPanel.SetOriginY(radius - robotArmX);
+            positionPanel.UpdateNowOrigin();
+            positionPanel.Invalidate();
             FormToRobotArm();
             //string robotArmOrigin = string.Format("{0},{1}", robot1.x, robot1.y);
             //txtInfo.Text = robotArmOrigin;
 
         }
+        public float RadianToAngel(float angel)
+        {
+            return angel * (float)Math.PI / 180;
+        }
 
-        /* public void ClampAngelToOrigin()
+         public void ClampAngelToOrigin()
          {
-             if (robotRotation > 90)
-             {
-                 robotClampX = clampRadius + (float)Math.Cos(180 - robotRotation) * clampRadius;
-                 robotClampY = radius + 50 + clampRadius - (float)Math.Sin(180 - robotRotation) * clampRadius;
-             }
-             else
-             {
-                 robotClampX = clampRadius - (float)Math.Cos(robotRotation) * clampRadius;
-                 robotClampY = radius + 50 + clampRadius - (float)Math.Sin(robotRotation) * clampRadius;
-             }
+             robotClampX = clampRadius - (float)Math.Cos(RadianToAngel(robotRotation)) * clampRadius;
+            Debug.WriteLine("cos(rotation)={0}", (float)Math.Cos(RadianToAngel(robotRotation)));
+             robotClampY = clampRadius - (float)Math.Sin(RadianToAngel(robotRotation)) * clampRadius;
              Debug.WriteLine("Clam: x:{0},y:{1}", robotClampX, robotClampY);
-             robotArmPositionPanel.SetClamArrowX(robotClampX);
+             clampPanel.SetClampArrow(robotClampX,robotClampY);
              string robotClampOrigin = string.Format("{0}", robotRotation);
              txtrotation.Text = robotClampOrigin;
 
          }
-         */
+         
         public void FormToRobotArm()
         {
             //robotArmPositionPanel.SetOriginX(radius - robotArmY);

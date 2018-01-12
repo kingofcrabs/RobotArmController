@@ -33,14 +33,15 @@
             this.positionTrackBar = new System.Windows.Forms.TrackBar();
             this.txtPosition = new System.Windows.Forms.TextBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.positionPanel1 = new RobotArm.PositionPanel();
-            this.robotArmClampPanel1 = new RobotArm.ClampPanel();
+            this.positionPanel = new RobotArm.PositionPanel();
+            this.clampPanel = new RobotArm.ClampPanel();
+            this.txtrotation = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.positionTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // init
             // 
-            this.init.Location = new System.Drawing.Point(141, 489);
+            this.init.Location = new System.Drawing.Point(90, 390);
             this.init.Name = "init";
             this.init.Size = new System.Drawing.Size(75, 23);
             this.init.TabIndex = 1;
@@ -50,7 +51,7 @@
             // 
             // move
             // 
-            this.move.Location = new System.Drawing.Point(320, 489);
+            this.move.Location = new System.Drawing.Point(274, 390);
             this.move.Name = "move";
             this.move.Size = new System.Drawing.Size(75, 23);
             this.move.TabIndex = 2;
@@ -72,29 +73,37 @@
             this.txtPosition.Size = new System.Drawing.Size(100, 21);
             this.txtPosition.TabIndex = 4;
             // 
-            // positionPanel1
+            // positionPanel
             // 
-            this.positionPanel1.Location = new System.Drawing.Point(12, 111);
-            this.positionPanel1.Name = "positionPanel1";
-            this.positionPanel1.Size = new System.Drawing.Size(456, 315);
-            this.positionPanel1.TabIndex = 8;
-            this.positionPanel1.Text = "positionPanel1";
+            this.positionPanel.Location = new System.Drawing.Point(12, 111);
+            this.positionPanel.Name = "positionPanel";
+            this.positionPanel.Size = new System.Drawing.Size(432, 239);
+            this.positionPanel.TabIndex = 8;
+            this.positionPanel.Text = "positionPanel1";
             // 
-            // robotArmClampPanel1
+            // clampPanel
             // 
-            this.robotArmClampPanel1.Location = new System.Drawing.Point(493, 320);
-            this.robotArmClampPanel1.Name = "robotArmClampPanel1";
-            this.robotArmClampPanel1.Size = new System.Drawing.Size(225, 106);
-            this.robotArmClampPanel1.TabIndex = 7;
-            this.robotArmClampPanel1.Text = "robotArmClampPanel1";
+            this.clampPanel.Location = new System.Drawing.Point(450, 125);
+            this.clampPanel.Name = "clampPanel";
+            this.clampPanel.Size = new System.Drawing.Size(225, 210);
+            this.clampPanel.TabIndex = 7;
+            this.clampPanel.Text = "clampPanel";
+            // 
+            // txtrotation
+            // 
+            this.txtrotation.Location = new System.Drawing.Point(466, 74);
+            this.txtrotation.Name = "txtrotation";
+            this.txtrotation.Size = new System.Drawing.Size(100, 21);
+            this.txtrotation.TabIndex = 9;
             // 
             // RobotControlForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(730, 569);
-            this.Controls.Add(this.positionPanel1);
-            this.Controls.Add(this.robotArmClampPanel1);
+            this.Controls.Add(this.txtrotation);
+            this.Controls.Add(this.positionPanel);
+            this.Controls.Add(this.clampPanel);
             this.Controls.Add(this.txtPosition);
             this.Controls.Add(this.positionTrackBar);
             this.Controls.Add(this.move);
@@ -114,9 +123,10 @@
         private System.Windows.Forms.TrackBar positionTrackBar;
         private System.Windows.Forms.TextBox txtPosition;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private PositionPanel robotArmPositionPanel;
-        private ClampPanel robotArmClampPanel1;
-        private PositionPanel positionPanel1;
+        //private PositionPanel robotArmPositionPanel;
+        private ClampPanel clampPanel;
+        private PositionPanel positionPanel;
+        private System.Windows.Forms.TextBox txtrotation;
     }
 }
 

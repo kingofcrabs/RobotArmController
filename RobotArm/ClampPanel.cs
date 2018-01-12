@@ -8,18 +8,18 @@ using System.Windows.Forms;
 
 namespace RobotArm
 {
-    class ClampPanel : Control
+    public partial class ClampPanel : Control
     {
         public const int clampRadius = 100;
-        private float clamArrowX = 0;
-        private float clamArrowY = clampRadius;
+        private float clampArrowX = 0;
+        private float clampArrowY = clampRadius;
 
-        public float GetClamArrowX() { return clamArrowX; }
-        public float GetClamArrowY() { return clamArrowY; }
-        public void SetClamArrow(float x, float y)
+        public float GetClampArrowX() { return clampArrowX; }
+        public float GetClampArrowY() { return clampArrowY; }
+        public void SetClampArrow(float x, float y)
         {
-            clamArrowX = x;
-            clamArrowY = y;
+            clampArrowX = x;
+            clampArrowY = y;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -34,7 +34,18 @@ namespace RobotArm
             g.DrawLine(pen1, new Point(0, clampRadius), new Point(2 * clampRadius, clampRadius));//在画板上画直线
             pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;//恢复实线  
             pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;//定义线尾的样式为箭头 
-            g.DrawLine(pen, clampRadius, clampRadius, clamArrowX, clamArrowY);
+            g.DrawLine(pen, clampRadius, clampRadius, clampArrowX, clampArrowY);
+
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // ClampPanel
+            // 
+            this.Name = "clampPanel";
+            this.ResumeLayout(false);
 
         }
     }
