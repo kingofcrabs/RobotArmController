@@ -28,14 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.init = new System.Windows.Forms.Button();
             this.move = new System.Windows.Forms.Button();
             this.positionTrackBar = new System.Windows.Forms.TrackBar();
             this.txtPosition = new System.Windows.Forms.TextBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.txtrotation = new System.Windows.Forms.TextBox();
+            this.txtMessage = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.clampOn = new System.Windows.Forms.Button();
+            this.clampOff = new System.Windows.Forms.Button();
+            this.zPanel = new RobotArm.ZPanel();
             this.positionPanel = new RobotArm.PositionPanel();
             this.clampPanel = new RobotArm.ClampPanel();
-            this.txtrotation = new System.Windows.Forms.TextBox();
+            this.txtZHeight = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.positionTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,6 +80,54 @@
             this.txtPosition.Size = new System.Drawing.Size(100, 21);
             this.txtPosition.TabIndex = 4;
             // 
+            // txtrotation
+            // 
+            this.txtrotation.Location = new System.Drawing.Point(466, 74);
+            this.txtrotation.Name = "txtrotation";
+            this.txtrotation.Size = new System.Drawing.Size(100, 21);
+            this.txtrotation.TabIndex = 9;
+            // 
+            // txtMessage
+            // 
+            this.txtMessage.Location = new System.Drawing.Point(437, 356);
+            this.txtMessage.Multiline = true;
+            this.txtMessage.Name = "txtMessage";
+            this.txtMessage.Size = new System.Drawing.Size(180, 109);
+            this.txtMessage.TabIndex = 10;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // clampOn
+            // 
+            this.clampOn.Location = new System.Drawing.Point(466, 257);
+            this.clampOn.Name = "clampOn";
+            this.clampOn.Size = new System.Drawing.Size(75, 23);
+            this.clampOn.TabIndex = 11;
+            this.clampOn.Text = "clampOn";
+            this.clampOn.UseVisualStyleBackColor = true;
+            this.clampOn.Click += new System.EventHandler(this.clampOn_Click);
+            // 
+            // clampOff
+            // 
+            this.clampOff.Location = new System.Drawing.Point(585, 256);
+            this.clampOff.Name = "clampOff";
+            this.clampOff.Size = new System.Drawing.Size(75, 23);
+            this.clampOff.TabIndex = 12;
+            this.clampOff.Text = "clampOff";
+            this.clampOff.UseVisualStyleBackColor = true;
+            this.clampOff.Click += new System.EventHandler(this.clampOff_Click);
+            // 
+            // zPanel
+            // 
+            this.zPanel.Location = new System.Drawing.Point(698, 12);
+            this.zPanel.Name = "zPanel";
+            this.zPanel.Size = new System.Drawing.Size(62, 311);
+            this.zPanel.TabIndex = 13;
+            this.zPanel.Text = "zPanel1";
+            // 
             // positionPanel
             // 
             this.positionPanel.Location = new System.Drawing.Point(12, 111);
@@ -89,18 +144,23 @@
             this.clampPanel.TabIndex = 7;
             this.clampPanel.Text = "clampPanel";
             // 
-            // txtrotation
+            // txtZHeight
             // 
-            this.txtrotation.Location = new System.Drawing.Point(466, 74);
-            this.txtrotation.Name = "txtrotation";
-            this.txtrotation.Size = new System.Drawing.Size(100, 21);
-            this.txtrotation.TabIndex = 9;
+            this.txtZHeight.Location = new System.Drawing.Point(698, 329);
+            this.txtZHeight.Name = "txtZHeight";
+            this.txtZHeight.Size = new System.Drawing.Size(75, 21);
+            this.txtZHeight.TabIndex = 14;
             // 
             // RobotControlForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(730, 569);
+            this.ClientSize = new System.Drawing.Size(785, 569);
+            this.Controls.Add(this.txtZHeight);
+            this.Controls.Add(this.zPanel);
+            this.Controls.Add(this.clampOff);
+            this.Controls.Add(this.clampOn);
+            this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.txtrotation);
             this.Controls.Add(this.positionPanel);
             this.Controls.Add(this.clampPanel);
@@ -123,10 +183,15 @@
         private System.Windows.Forms.TrackBar positionTrackBar;
         private System.Windows.Forms.TextBox txtPosition;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        //private PositionPanel robotArmPositionPanel;
         private ClampPanel clampPanel;
         private PositionPanel positionPanel;
         private System.Windows.Forms.TextBox txtrotation;
+        private System.Windows.Forms.TextBox txtMessage;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.Button clampOn;
+        private System.Windows.Forms.Button clampOff;
+        private ZPanel zPanel;
+        private System.Windows.Forms.TextBox txtZHeight;
     }
 }
 

@@ -16,11 +16,12 @@ namespace RobotArm
         const int radius = PositionPanel.radius;
         const int clampRadius = ClampPanel.clampRadius;
         
-        private float robotArmX;
-        private float robotArmY;
-        private float robotRotation = 0;
-        private float robotClampX = 0;
-        private float robotClampY = 0;
+        private float positionX;
+        private float positionY;
+        private float rotation = 0;
+        private float clampX = 0;
+        private float clampY = 0;
+        private float zHeight = 0;
 
         Controller control = new Controller();
 
@@ -37,7 +38,12 @@ namespace RobotArm
         private void RobotControlForm_Load(object sender, EventArgs e)
         {
             positionTrackBar.ValueChanged += PositionTrackBar_ValueChanged;
-            //trackBar1.ValueChanged += trackBar1_ValueChanged;//获取trackBar1的值
+            control.Display += Control_Display;
+        }
+
+        void Control_Display(string message)
+        {
+            txtMessage.Text = message;
         }
         void PositionTrackBar_ValueChanged(object sender, EventArgs e)
         {
@@ -50,8 +56,7 @@ namespace RobotArm
             Random ranOrigin = new Random(iSeed);
             while ((positionPanel.GetOriginX() - radius) * (positionPanel.GetOriginX() - radius) + (positionPanel.GetOriginY() - radius) * (positionPanel.GetOriginY() - radius) > radius * radius)
             {
-                positionPanel.SetOriginX(ranOrigin.Next(0, radius * 2));
-                positionPanel.SetOriginY(ranOrigin.Next(0, radius));
+                positionPanel.SetOrigin(ranOrigin.Next(0, radius * 2), ranOrigin.Next(0, radius));
             }
             positionPanel.UpdateNowOrigin();
             Debug.WriteLine(positionPanel.GetOriginX());
@@ -101,9 +106,9 @@ namespace RobotArm
                 case Keys.Right:
                     //if(CheckOrigin(Direction.Right))
                     {
-                        positionPanel.SetOriginX(positionPanel.GetOriginX() + positionTrackBar.Value);
+                        positionY -= positionTrackBar.Value/2;
+                        PositionPanelToRobotArm();
                         positionPanel.Invalidate();
-                        FormToRobotArm();
                     }
                     //else
                     //{
@@ -115,9 +120,9 @@ namespace RobotArm
                 case Keys.Left:
                     //if (CheckOrigin(Direction.Left))
                     {
-                        positionPanel.SetOriginX(positionPanel.GetOriginX() - positionTrackBar.Value);
+                        positionY += positionTrackBar.Value/2;
+                        PositionPanelToRobotArm();
                         positionPanel.Invalidate();
-                        FormToRobotArm();
                     }
                     //else
                     //{
@@ -129,9 +134,9 @@ namespace RobotArm
                 case Keys.Up:
                     //if (CheckOrigin(Direction.Up))
                     {
-                        positionPanel.SetOriginY(positionPanel.GetOriginY() - positionTrackBar.Value);
+                        positionX += positionTrackBar.Value;
+                        PositionPanelToRobotArm();
                         positionPanel.Invalidate();
-                        FormToRobotArm();
                     }
                     //else
                     //{
@@ -143,9 +148,9 @@ namespace RobotArm
                 case Keys.Down:
                     //if (CheckOrigin(Direction.Down))
                     {
-                        positionPanel.SetOriginY(positionPanel.GetOriginY() + positionTrackBar.Value);
+                        positionX -= positionTrackBar.Value;
+                        PositionPanelToRobotArm();
                         positionPanel.Invalidate();
-                        FormToRobotArm();
                     }
                     //else
                     //{
@@ -155,70 +160,81 @@ namespace RobotArm
                     //}
                     break;
                 case Keys.A:
-                    robotRotation -= 90;
+                    rotation -= 5;
                     ClampAngelToOrigin();
                     clampPanel.Invalidate();
                     break;
                 case Keys.D:
-                    robotRotation += 90;
+                    rotation += 5;
                     ClampAngelToOrigin();
                     clampPanel.Invalidate();
                     break;
-
+                case Keys.W:
+                    zHeight += 5;
+                    SetZHeight();
+                    zPanel.Invalidate();
+                    break;
+                case Keys.S:
+                    zHeight -= 5;
+                    SetZHeight();
+                    zPanel.Invalidate();
+                    break;
             }
             return true;
         }
 
-        public void InitOrigin()
+        public void InitData()
         {
-            robotArmX = control.robot1.x/2;
-            robotArmY = control.robot1.y/2;
-            robotRotation = control.robot1.rotation;
+            positionX = control.robot1.x/2;
+            positionY = control.robot1.y/2;
+            rotation = control.robot1.rotation;
+            zHeight = control.robot1.z;
 
             ClampAngelToOrigin();
+            clampPanel.Invalidate();
 
-            Debug.WriteLine("rotation:{0}", robotRotation);
+            Debug.WriteLine("rotation:{0}", rotation);
             Debug.WriteLine("angle1:{0}", control.robot1.angle1);
             Debug.WriteLine("angle2:{0}", control.robot1.angle2);
-            Debug.WriteLine("x:{0}", robotArmX);
-            Debug.WriteLine("y:{0}", robotArmY);
+            Debug.WriteLine("x:{0}", positionX);
+            Debug.WriteLine("y:{0}", positionY);
 
-            positionPanel.SetOriginX(radius - robotArmY);
-            positionPanel.SetOriginY(radius - robotArmX);
-            positionPanel.UpdateNowOrigin();
+            PositionPanelToRobotArm();
             positionPanel.Invalidate();
-            FormToRobotArm();
-            //string robotArmOrigin = string.Format("{0},{1}", robot1.x, robot1.y);
-            //txtInfo.Text = robotArmOrigin;
 
+            SetZHeight();
+            zPanel.Invalidate();
         }
+        
         public float RadianToAngel(float angel)
         {
             return angel * (float)Math.PI / 180;
         }
 
+        public void SetZHeight()
+        {
+            zPanel.SetArrowHeight(-zHeight);
+            string strZHeight = string.Format("{0}", zHeight);
+            txtZHeight.Text = strZHeight;
+        }
          public void ClampAngelToOrigin()
          {
-             robotClampX = clampRadius - (float)Math.Cos(RadianToAngel(robotRotation)) * clampRadius;
-            Debug.WriteLine("cos(rotation)={0}", (float)Math.Cos(RadianToAngel(robotRotation)));
-             robotClampY = clampRadius - (float)Math.Sin(RadianToAngel(robotRotation)) * clampRadius;
-             Debug.WriteLine("Clam: x:{0},y:{1}", robotClampX, robotClampY);
-             clampPanel.SetClampArrow(robotClampX,robotClampY);
-             string robotClampOrigin = string.Format("{0}", robotRotation);
-             txtrotation.Text = robotClampOrigin;
+             clampX = clampRadius - (float)Math.Cos(RadianToAngel(rotation)) * clampRadius;
+             Debug.WriteLine("cos(rotation)={0}", (float)Math.Cos(RadianToAngel(rotation)));
+             clampY = clampRadius - (float)Math.Sin(RadianToAngel(rotation)) * clampRadius;
+             Debug.WriteLine("Clam: x:{0},y:{1}", clampX, clampY);
+             clampPanel.SetClampArrow(clampX, clampY);
+             string strClampAngle = string.Format("{0}", rotation%360);
+             txtrotation.Text = strClampAngle;
 
          }
          
-        public void FormToRobotArm()
+        public void PositionPanelToRobotArm()
         {
-            //robotArmPositionPanel.SetOriginX(radius - robotArmY);
-            //robotArmPositionPanel.SetOriginY(radius - robotArmX);
-            //robotArmPositionPanel.UpdateNowOrigin();
-            //robotArmPositionPanel.Invalidate();
-            //robotArmX = radius - robotArmPositionPanel.GetOriginY();
-            //robotArmY = radius - robotArmPositionPanel.GetOriginX();
-            string robotArmOrigin = string.Format("{0},{1}", robotArmX*2, robotArmY*2);
-            txtPosition.Text = robotArmOrigin;
+            positionPanel.SetOrigin(radius - positionY, radius - positionX);
+            positionPanel.UpdateNowOrigin();
+            string strPosition = string.Format("{0},{1}", positionX * 2, positionY * 2);
+            txtPosition.Text = strPosition;
 
 
         }
@@ -229,19 +245,23 @@ namespace RobotArm
         {
             control.RobotArmInit();
             Debug.WriteLine("init click");
-            InitOrigin();
+            InitData();
         }
 
         private void move_Click_1(object sender, EventArgs e)
         {
-            //robotArmPositionPanel.UpdateNowOrigin();
-            //robotArmPositionPanel.Invalidate();
-            // myScaraController.Init();
-            //control.RobotArmInit();
-            // FormToRobotArm();
-            // string robotArmOrigin = string.Format("{0},{1}", RobotArmX, RobotArmY);
-            //  txtInfo.Text = robotArmOrigin;
-            control.RobotArmMove(robotArmX*2, robotArmY*2, 0, 0, 30, 1, 1, 1);
+            control.MovePosition(positionX * 2, positionY * 2, zHeight, 60/*rotation*/, 20, 1, 1, 1);
+            //control.MoveArm4(rotation);
+        }
+
+        private void clampOn_Click(object sender, EventArgs e)
+        {
+            control.ClampOn();
+        }
+
+        private void clampOff_Click(object sender, EventArgs e)
+        {
+            control.ClampOff();
         }
     }
 

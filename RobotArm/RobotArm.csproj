@@ -13,7 +13,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -64,6 +64,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controller.cs" />
+    <Compile Include="ZPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="ClampPanel.resx">
       <DependentUpon>ClampPanel.cs</DependentUpon>
     </EmbeddedResource>

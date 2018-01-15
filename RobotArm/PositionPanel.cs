@@ -21,10 +21,11 @@ namespace RobotArm
 
         public float GetOriginX() { return originX; }
         public float GetOriginY() { return originY; }
-        public void SetOriginX(float x) { originX = x; }
-        public void SetOriginY(float y) { originY = y; }
-
-
+        public void SetOrigin(float x,float y)
+        {
+            originX = x;
+            originY = y;
+        }
 
         public void UpdateNowOrigin()
         {
