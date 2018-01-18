@@ -54,7 +54,7 @@
             this.init.TabIndex = 1;
             this.init.Text = "INIT";
             this.init.UseVisualStyleBackColor = true;
-            this.init.Click += new System.EventHandler(this.init_Click_1);
+            this.init.Click += new System.EventHandler(this.init_Click);
             // 
             // move
             // 
@@ -64,7 +64,7 @@
             this.move.TabIndex = 2;
             this.move.Text = "MOVE";
             this.move.UseVisualStyleBackColor = true;
-            this.move.Click += new System.EventHandler(this.move_Click_1);
+            this.move.Click += new System.EventHandler(this.move_Click);
             // 
             // positionTrackBar
             // 

@@ -67,8 +67,8 @@ namespace RobotArm
                     robot1.unlock_position();//解锁
                     DisplayMessage(robot1.get_card_num().ToString() + "初始化完成");
                     robot1.get_scara_param();
-                    Debug.WriteLine(robot1.x);
-                    Debug.WriteLine(robot1.y);
+                    //Debug.WriteLine(robot1.x);
+                    //Debug.WriteLine(robot1.y);
                 }
                 else
                 {
